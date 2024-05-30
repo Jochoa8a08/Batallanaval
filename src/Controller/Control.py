@@ -2,7 +2,7 @@ import psycopg2
 import sys
 sys.path.append("src")
 sys.path.append(".")
-import SecretConfigSample
+import SecretConfig
 #from Model.Juego_principal import TableroBatallaNaval
 # Do not expose your Neon credentials to the browser
 import json
@@ -16,11 +16,11 @@ def guardar_partida (jugador1, jugador2, tablero_jugador1, tablero_jugador2):
 
             # Conectar a la base de datos PostgreSQL
         conexion = psycopg2.connect(
-            database= SecretConfigSample.PGDATABASE, 
-            user= SecretConfigSample.PGUSER, 
-            password= SecretConfigSample.PGPASSWORD, 
-            host= SecretConfigSample.PGHOST, 
-            port= SecretConfigSample.PGPORT
+            database= SecretConfig.PGDATABASE, 
+            user= SecretConfig.PGUSER, 
+            password= SecretConfig.PGPASSWORD, 
+            host= SecretConfig.PGHOST, 
+            port= SecretConfig.PGPORT
         )
             
         cursor = conexion.cursor()
