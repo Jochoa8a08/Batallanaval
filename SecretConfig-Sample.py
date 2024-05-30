@@ -1,5 +1,5 @@
-PGHOST='xxxxxxxxxxxxh'
-PGDATABASE='xxxxxxxxxxxxxxxxx'
-PGUSER='xxxxxxxxxxxxxxxxxxxxx'
+PGHOST='xxxxxxxxxxxxx'
+PGDATABASE='xxx'
+PGUSER='xxxxxxxxxxxxx'
 PGPASSWORD='xxxxxxxxxxx'
 PGPORT= 5432

@@ -32,14 +32,16 @@ El proyecto está implementado en Python con interfaz gráfica, conexion a base 
 ### Organización de los módulos:
 - **src**:
   - Contiene la carpeta `Controller` donde se encuentra el archivo `Control.py`.
-  - Contiene la carpeta `GUI` donde se encuentra el archivo `interfazz.py`.
+  - Contiene la carpeta `View` donde se encuentra el archivo `interfazz.py` y la carpeta `web`
+  - La carpeta `web` contiene la carpeta `template`
+  - La carpeta `template`contiene los archivos `index.html` y `partidas.html`.
   - Contiene la carpeta `Model` donde se encuentran los archivos `Juego_principal.py` y `Logica.py`.
 - **tests**:
   - Contiene el archivo `testBD.py`.
   - Contiene el archivo `testjuego.py`.
-- **web**:
-  - Contiene la carpeta `Templates` donde se encuentran los archivos `index.html` y `partidas.html`.
-  - Contiene el archivo `app.py`.
+- **app.py**:
+  - Contiene el archivo principal del juego
+
 ## Uso
 
 Para ejecutas la consola , desde la carpeta del programa , use el comando.

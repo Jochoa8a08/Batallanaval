@@ -4,6 +4,7 @@ import psycopg2
 import json
 sys.path.append("src")
 sys.path.append(".")
+
 from Model import Juego_principal
 from Model.Logica import get_db_connection,guardar_partida
 # Inicializar los tableros para los dos jugadores
@@ -19,7 +20,6 @@ opponent_board.nave_de_5_casillas()
 opponent_board.nave_de_2_casillas()
 
 app = Flask(__name__)
-app.secret_key = 'supersecretkey'  
 
 
 @app.route('/')
@@ -116,6 +116,8 @@ def make_move():
         result['game_over'] = True
     
     return jsonify(result)
+
+app.secret_key = 'supersecretkey'  
 
 
 if __name__ == '__main__':

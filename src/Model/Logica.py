@@ -26,15 +26,15 @@ def rango_correcto (filas, columnas ):
 from flask import Flask, request, render_template, redirect, url_for, flash, jsonify
 import sys
 import psycopg2
-import SecretConfig
+import SecretConfigSample
 import json
 def get_db_connection():
     return psycopg2.connect(
-        database=SecretConfig.PGDATABASE,
-        user=SecretConfig.PGUSER,
-        password=SecretConfig.PGPASSWORD,
-        host=SecretConfig.PGHOST,
-        port=SecretConfig.PGPORT
+        database=SecretConfigSample.PGDATABASE,
+        user=SecretConfigSample.PGUSER,
+        password=SecretConfigSample.PGPASSWORD,
+        host=SecretConfigSample.PGHOST,
+        port=SecretConfigSample.PGPORT
     )
 
 def create_tables():

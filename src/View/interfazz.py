@@ -7,6 +7,7 @@ from kivy.uix.popup import Popup
 import sys
 sys.path.append("src")
 sys.path.append(".")
+
 from Controller import Control
 from Model.Juego_principal import TableroBatallaNaval
 

@@ -2,7 +2,7 @@ import psycopg2
 import sys
 sys.path.append("src")
 sys.path.append(".")
-import SecretConfig
+import SecretConfigSample
 #from Model.Juego_principal import TableroBatallaNaval
 # Do not expose your Neon credentials to the browser
 import json
@@ -16,11 +16,11 @@ def guardar_partida (jugador1, jugador2, tablero_jugador1, tablero_jugador2):
 
             # Conectar a la base de datos PostgreSQL
         conexion = psycopg2.connect(
-            database= SecretConfig.PGDATABASE, 
-            user= SecretConfig.PGUSER, 
-            password= SecretConfig.PGPASSWORD, 
-            host= SecretConfig.PGHOST, 
-            port= SecretConfig.PGPORT
+            database= SecretConfigSample.PGDATABASE, 
+            user= SecretConfigSample.PGUSER, 
+            password= SecretConfigSample.PGPASSWORD, 
+            host= SecretConfigSample.PGHOST, 
+            port= SecretConfigSample.PGPORT
         )
             
         cursor = conexion.cursor()
@@ -57,11 +57,11 @@ def guardar_partida (jugador1, jugador2, tablero_jugador1, tablero_jugador2):
 
 def eliminar_partida():
     try:
-        conexion = psycopg2.connect(database= SecretConfig.PGDATABASE, 
-            user= SecretConfig.PGUSER, 
-            password= SecretConfig.PGPASSWORD, 
-            host= SecretConfig.PGHOST, 
-            port= SecretConfig.PGPORT)  
+        conexion = psycopg2.connect(database= SecretConfigSample.PGDATABASE, 
+            user= SecretConfigSample.PGUSER, 
+            password= SecretConfigSample.PGPASSWORD, 
+            host= SecretConfigSample.PGHOST, 
+            port= SecretConfigSample.PGPORT)  
         cursor = conexion.cursor()
         cursor.execute("DELETE FROM partidas WHERE id = (SELECT MAX(id) FROM partidas)")
         conexion.commit()
@@ -79,11 +79,11 @@ def cargar_partida():
     try:
         # Conectar a la base de datos PostgreSQL
         conexion = psycopg2.connect(
-            database=SecretConfig.PGDATABASE,
-            user=SecretConfig.PGUSER,
-            password=SecretConfig.PGPASSWORD,
-            host=SecretConfig.PGHOST,
-            port=SecretConfig.PGPORT
+            database=SecretConfigSample.PGDATABASE,
+            user=SecretConfigSample.PGUSER,
+            password=SecretConfigSample.PGPASSWORD,
+            host=SecretConfigSample.PGHOST,
+            port=SecretConfigSample.PGPORT
         )
         cursor = conexion.cursor()
 
@@ -114,11 +114,11 @@ def cargar_partida():
 def consultar_numero_de_partidas_existentes():
     try:
         conexion = psycopg2.connect(
-            database=SecretConfig.PGDATABASE,
-            user=SecretConfig.PGUSER,
-            password=SecretConfig.PGPASSWORD,
-            host=SecretConfig.PGHOST,
-            port=SecretConfig.PGPORT
+            database=SecretConfigSample.PGDATABASE,
+            user=SecretConfigSample.PGUSER,
+            password=SecretConfigSample.PGPASSWORD,
+            host=SecretConfigSample.PGHOST,
+            port=SecretConfigSample.PGPORT
         )
         cursor = conexion.cursor()
 
