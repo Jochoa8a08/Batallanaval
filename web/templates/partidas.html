@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Partidas Guardadas</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Partidas Guardadas</h1>
+
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Jugador 1</th>
+            <th>Jugador 2</th>
+            <th>Tablero Jugador 1</th>
+            <th>Tablero Jugador 2</th>
+            <th>Acciones</th>
+        </tr>
+        {% for partida in partidas %}
+        <tr>
+            <td>{{ partida[0] }}</td>
+            <td>{{ partida[1] }}</td>
+            <td>{{ partida[2] }}</td>
+            <td>{{ partida[3] }}</td>
+            <td>{{ partida[4] }}</td>
+            <td>
+                <div class="actions">
+                    <form action="{{ url_for('eliminar', id=partida[0]) }}" method="post">
+                        <button type="submit">Eliminar</button>
+                    </form>
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <a href="{{ url_for('index') }}">Volver al inicio</a>
+</body>
+</html>

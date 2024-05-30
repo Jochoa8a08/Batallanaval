@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guardar Partida</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            text-align: center;
+        }
+        table {
+            border-collapse: collapse;
+            margin: auto;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            width: 30px;
+            height: 30px;
+            text-align: center;
+        }
+        .tableros {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .flash-messages {
+            position: fixed;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #f0f0f0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .flash-messages ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+        .flash-messages li {
+            margin: 0;
+            padding: 5px 0;
+        }
+        .flash-messages .close-btn {
+            float: right;
+            cursor: pointer;
+            padding: 0 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Guardar Partida de Batalla Naval</h1>
+
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div class="flash-messages">
+            <span class="close-btn" onclick="this.parentElement.style.display='none';">&times;</span>
+            <ul>
+                {% for message in messages %}
+                <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+        {% endwith %}
+
+        <form action="{{ url_for('guardar') }}" method="post">
+            <label for="jugador1">Jugador 1:</label>
+            <input type="text" id="jugador1" name="jugador1" required><br><br>
+            <label for="jugador2">Jugador 2:</label>
+            <input type="text" id="jugador2" name="jugador2" required><br><br>
+
+            <div class="tableros">
+                <div>
+                    <h3>Tablero Jugador 1</h3>
+                    <table id="tablero-jugador1">
+                        {% for i in range(10) %}
+                        <tr>
+                            {% for j in range(10) %}
+                            <td>
+                                <select name="tablero_jugador1[{{i}}][{{j}}]" onchange="cambiarColor(this, {{i}}, {{j}}, 'tablero_jugador1')">
+                                    <option value="O">O</option>
+                                    <option value="X">X</option>
+                                </select>
+                            </td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+
+                <div>
+                    <h3>Tablero Jugador 2</h3>
+                    <table id="tablero-jugador2">
+                        {% for i in range(10) %}
+                        <tr>
+                            {% for j in range(10) %}
+                            <td>
+                                <select name="tablero_jugador2[{{i}}][{{j}}]" onchange="cambiarColor(this,{{i}},{{j}}, 'tablero_jugador2')">
+                                    <option value="O">O</option>
+                                    <option value="X">X</option>
+                                </select>
+                            </td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+
+            <br>
+            <button type="submit">Guardar Partida</button>
+        </form>
+
+        <br>
+        <h2>Cargar Partida</h2>
+        <form id="cargar-partida-form">
+            <label for="partida-id">Seleccionar Partida:</label>
+            <select id="partida-id" name="partida-id">
+                <option value="">--Seleccionar--</option>
+                {% for partida in partidas %}
+                <option value="{{ partida[0] }}">ID partida {{ partida[0] }} - {{ partida[1] }} vs {{ partida[2] }}</option>
+                {% endfor %}
+            </select>
+            <button type="button" onclick="cargarPartida()">Cargar Partida</button>
+        </form>
+
+        <br>
+        <a href="{{ url_for('partidas') }}">Consultar Partidas</a>
+    </div>
+
+    <script>
+        function cambiarColor(selectElement, i, j, tablero) {
+            const value = selectElement.value;
+            const cell = document.querySelector(`select[name='${tablero}[${i}][${j}]']`).parentElement;
+            
+            fetch('/make_move', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ x: i, y: j })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.hit) {
+                    cell.style.backgroundColor = 'red';
+                    alert('¡Impacto!');
+                } else {
+                    cell.style.backgroundColor = 'blue';
+                    alert('Agua.');
+                }
+            })
+            .catch(error => {
+                console.error('Error al hacer el movimiento:', error);
+                alert('Hubo un error al hacer el movimiento.');
+            });
+        }
+
+        function cargarPartida() {
+            const partidaId = document.getElementById('partida-id').value;
+            if (!partidaId) {
+                alert('Por favor selecciona una partida.');
+                return;
+            }
+
+            fetch(`/cargar_partida/${partidaId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        alert(data.error);
+                    } else {
+                        document.getElementById('jugador1').value = data.jugador1;
+                        document.getElementById('jugador2').value = data.jugador2;
+
+                        const tableroJugador1 = data.tablero_jugador1;
+                        const tableroJugador2 = data.tablero_jugador2;
+
+                        for (let i = 0; i < 10; i++) {
+                            for (let j = 0; j < 10; j++) {
+                                const select1 = document.querySelector(`select[name='tablero_jugador1[${i}][${j}]']`);
+                                select1.value = tableroJugador1[i][j];
+                                select1.parentElement.style.backgroundColor = (tableroJugador1[i][j] === 'X') ? 'red' : 'blue';
+
+                                const select2 = document.querySelector(`select[name='tablero_jugador2[${i}][${j}]']`);
+                                select2.value = tableroJugador2[i][j];
+                                select2.parentElement.style.backgroundColor = (tableroJugador2[i][j] === 'X') ? 'red' : 'blue';
+                            }
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error('Error al cargar la partida:', error);
+                    alert('Hubo un error al cargar la partida.');
+                });
+        }
+    </script>
+</body>
+</html>
